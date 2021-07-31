@@ -21,5 +21,12 @@
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
       </activity>
+
+      <!-- // Imp. 28/07/21, Para la libreria de maps -->
+      <meta-data
+        android:name="com.google.android.geo.API_KEY"
+        android:value="AIzaSyAhV_KoEEPZBHOp0o4xkFxNRGGCI_M1jaQ"/>
+      <uses-library android:name="org.apache.http.legacy" android:required="false"/>
+
     </application>
 </manifest>

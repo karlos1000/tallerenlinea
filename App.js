@@ -1,237 +1,217 @@
-import 'react-native-gesture-handler';
-import React, {useEffect, useState} from 'react';
-import {Text, View, StyleSheet, Image, Dimensions, LogBox, Button, Alert, Linking, ActivityIndicator} from 'react-native';
-import Carousel from 'react-native-banner-carousel';
-import Share from 'react-native-share';
-import { InAppBrowser } from 'react-native-inappbrowser-reborn';
-import YoutubePlayer from "react-native-youtube-iframe"
-import { WebView } from 'react-native-webview';
+import React from "react";
+import { View, Text, Button } from "react-native";
+import { NavigationContainer} from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import { createDrawerNavigator } from "@react-navigation/drawer";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
-const BannerWidth = Dimensions.get('window').width;
-const BannerHeight = 150;
+import TabFooter from "./navigation/TabFooter";
 
-const images = [
-    "https://t3.ftcdn.net/jpg/04/40/77/78/240_F_440777886_oiekaCyoHa9qZoRMRlrVLbgFkQL6lVFJ.jpg",
-    "https://t4.ftcdn.net/jpg/03/14/14/11/240_F_314141146_OLdlWE1SkeUyquNjSa45S6pxAmss6VbK.jpg",
-    "https://t4.ftcdn.net/jpg/04/41/08/67/240_F_441086743_fVFqeNT3A7J9QeceWwUpvCcEq3KKh6G8.jpg"
-];
+const Stack = createStackNavigator();
+const Drawer = createDrawerNavigator();
 
-const showImg = (image, index) => {
-  useEffect(() => {
-    LogBox.ignoreLogs(['Animated: `useNativeDriver`']);
-  }, [])
 
-  return (
-      <View key={index}>
-          <Image style={{ width: BannerWidth, height: BannerHeight }} source={{ uri: image }} />
-      </View>
-  );
+function InicioScreen( {navigation} ){
+  return(
+    <>
+    <View>
+      <Text>Contenido Inicio</Text>
+      <Button
+        title="Ir a Acerca de"
+        onPress={() => navigation.navigate("AcercaDe")}
+      />
+    </View>
+    <TabFooter/>
+    </>
+  )
+}
+function AcercaDeScreen( {navigation} ){
+  return(
+    <>
+    <View>
+      <Text>Contenido de Acerca de</Text>
+      <Button
+        title="Regresar a Inicio"
+        onPress={() => navigation.goBack()}
+      />
+    </View>
+    <TabFooter/>
+    </>
+  )
+}
+function MiCuentaScreen( {navigation} ){
+  return(
+    <>
+    <View>
+      <Text>Contenido de Mi Cuenta</Text>
+      <Button
+        title="Regresar a Gama de modelos"
+        onPress={() => navigation.goBack()}
+      />
+    </View>
+    <TabFooter/>
+    </>
+  )
 }
 
-// Compartir
-const shareOptions = {
-  title: 'Share via',
-  message: 'some message',
-  url: 'https://www.google.com.mx/',
-  // social: Share.Social.WHATSAPP,
-  // whatsAppNumber: "9199999999",  // country code + phone number
-  // filename: 'test' , // only for base64 file in Android
-};
 
-const funShare = async () => {
-// const funShare = () => {
-  // const shareResponse = await Share.shareSingle({});
-  // const shareResponse = await Share.open({});
 
-  try {
-    const shareResponse = await Share.open(shareOptions);
-    console.log(shareResponse);
-  } catch (error) {
-    console.log(error);
-  }
+function GamaModelosScreen({navigation}){
+  return(
+    <>
+    <View>
+      <Text>Contenido Gama de Modelos</Text>
+      <Button
+        title="Ir a Gama de modelos"
+        onPress={() => navigation.navigate("MiCuenta")}
+      />
+    </View>
+    <TabFooter/>
+    </>
+  )
+}
+function AutosNuevosScreen(){
+  return(
+    <>
+    <View><Text>Contenido Autos Nuevos</Text></View>
+    <TabFooter/>
+    </>
+  )
+}
+function AutosSeminuevosScreen(){
+  return(
+    <>
+    <View><Text>Contenido Autos seminuevos</Text></View>
+    <TabFooter/>
+    </>
+  )
+}
+function ReparacionVivoScreen(){
+  return(
+    <>
+    <View><Text>Contenido Reparación en Vivo</Text></View>
+    <TabFooter/>
+    </>
+  )
+}
+function CitaServicioScreen(){
+  return(
+    <>
+    <View><Text>Contenido Cita de Servicio</Text></View>
+    <TabFooter/>
+    </>
+  )
+}
+function TelAseguradorasScreen(){
+  return(
+    <>
+    <View><Text>Contenido Teléfonos Aseguradoras</Text></View>
+    <TabFooter/>
+    </>
+  )
+}
+function AjustesScreen(){
+  return(
+    <>
+    <View><Text>Contenido de Ajustes</Text></View>
+    <TabFooter/>
+    </>
+  )
 }
 
-const linkShare = () => {
-  funShare();
+//-----
+function ContactoDeScreen(){
+  return(
+    <>
+    <View><Text>Contenido de contacto</Text></View>
+    <TabFooter/>
+    </>
+  )
 }
 
-// InAppBrowser
-// const openInAppBrowser = () => {
-const openInAppBrowser = async () => {
-  /* Alert.alert(
-    "Alert Title",
-    "My Alert Msg",
-    [
-      {
-        text: "Cancel",
-        onPress: () => console.log("Cancel Pressed"),
-        style: "cancel"
-      },
-      { text: "OK", onPress: () => console.log("OK Pressed") }
-    ]
-  ); */
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-  try {
-      const url = 'https://srautoforumcp.mozi.mx/';
+function Inicio(){
+  return(
+    <Stack.Navigator>
+      <Stack.Screen name="Inicio" component={InicioScreen} />
+      <Stack.Screen name="AcercaDe" component={AcercaDeScreen} />
 
-      if (await InAppBrowser.isAvailable()) {
-        const result = await InAppBrowser.open(url, {
-          // // iOS Properties
-          // dismissButtonStyle: 'cancel',
-          // preferredBarTintColor: '#453AA4',
-          // preferredControlTintColor: 'white',
-          // readerMode: false,
-          // animated: true,
-          // modalPresentationStyle: 'fullScreen',
-          // modalTransitionStyle: 'coverVertical',
-          // modalEnabled: true,
-          // enableBarCollapsing: false,
-          // Android Properties
-          showTitle: false,
-          toolbarColor: '#FFFFFF',
-          secondaryToolbarColor: 'white',
-          navigationBarColor: 'white',
-          navigationBarDividerColor: 'white',
-          enableUrlBarHiding: true,
-          enableDefaultShare: false,
-          forceCloseOnRedirection: true,
-          hasBackButton: true,
-          // Specify full animation resource identifier(package:anim/name)
-          // or only resource name(in case of animation bundled with app).
-          animations: {
-            startEnter: 'slide_in_right',
-            startExit: 'slide_out_left',
-            endEnter: 'slide_in_left',
-            endExit: 'slide_out_right'
-          },
-          headers: {
-            'my-custom-header': 'my custom header value'
-          }
-        })
-        // Alert.alert(JSON.stringify(result))
-      }
-      else{
-         Linking.openURL(url);
-      }
-  } catch (error) {
-    console.log(error);
-  }
+      {/* Declara las vistas Tab footer */}
+      <Stack.Screen name="Contacto" component={ContactoDeScreen} />
+    </Stack.Navigator>
+  )
 }
 
+function GamaModelos(){
+  return(
+    <Stack.Navigator>
+      <Stack.Screen name="GamaModelos" component={GamaModelosScreen} />
+      <Stack.Screen name="MiCuenta" component={MiCuentaScreen} />
+      <Stack.Screen name="AcercaDe" component={AcercaDeScreen} />
+
+      {/* Declara las vistas Tab footer */}
+      <Stack.Screen name="Contacto" component={ContactoDeScreen} />
+    </Stack.Navigator>
+  )
+}
+function AutosNuevos(){
+  return(
+    <Stack.Navigator>
+      <Stack.Screen name="AutosNuevos" component={AutosNuevosScreen} />
+    </Stack.Navigator>
+  )
+}
+function AutosSeminuevos(){
+  return(
+    <Stack.Navigator>
+      <Stack.Screen name="AutosSeminuevos" component={AutosSeminuevosScreen} />
+    </Stack.Navigator>
+  )
+}
+function ReparacionVivo(){
+  return(
+    <Stack.Navigator>
+      <Stack.Screen name="ReparacionVivo" component={ReparacionVivoScreen} />
+    </Stack.Navigator>
+  )
+}
+function CitaServicio(){
+  return(
+    <Stack.Navigator>
+      <Stack.Screen name="CitaServicio" component={CitaServicioScreen} />
+    </Stack.Navigator>
+  )
+}
+function TelAseguradoras(){
+  return(
+    <Stack.Navigator>
+      <Stack.Screen name="TelAseguradoras" component={TelAseguradorasScreen} />
+    </Stack.Navigator>
+  )
+}
+function Ajustes(){
+  return(
+    <Stack.Navigator>
+      <Stack.Screen name="Ajustes" component={AjustesScreen} />
+    </Stack.Navigator>
+  )
+}
 
 const App = () => {
-
   return (
-    <View style={styles.container}>
-        {/* <Carousel
-            autoplay
-            autoplayTimeout={5000}
-            loop
-            index={0}
-            pageSize={BannerWidth}
-        >
-            { images.map((image, index) => showImg(image, index)) }
-        </Carousel>
-
-        <View><Text>-----</Text></View>
-        <Button
-          onPress={linkShare}
-          title="Compartir"
-          color="#841584"
-          accessibilityLabel="Learn more about this purple button"
-        />
-
-        <View><Text>-----</Text></View>
-        <Button
-          onPress={openInAppBrowser}
-          title="InAppBrowser"
-          color="#841584"
-          accessibilityLabel="Learn more about this purple button"
-        />
-
-        <View><Text>-----</Text></View> */}
-        {/* <View>
-              <YoutubePlayer
-                height={300}
-                play={true}
-                videoId={"iee2TATGMyI"}
-                // onChangeState={onStateChange}
-              />
-        </View> */}
-
-        {/* <WebView
-          source={{html: '<iframe width="100%" height="100%" src="https://srautoforumcp.mozi.mx/" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>'}}
-          style={{marginTop: 20}}
-        /> */}
-
-        <WebView
-          style={{flex: 1}}
-          originWhitelist={['*']}
-          source={{ uri: "https://www.dasweltauto.com.mx/es.html" }}
-          style={{ marginTop: 20 }}
-          javaScriptEnabled={true}
-          domStorageEnabled={true}
-          renderLoading={() => (
-            <View style={{ flex: 1, alignItems: 'center' }}>
-              <ActivityIndicator size="large" />
-            </View>
-          )}
-        />
-    </View>
+    <NavigationContainer>
+      <Drawer.Navigator>
+        <Drawer.Screen name="Inicio" component={Inicio}></Drawer.Screen>
+        <Drawer.Screen name="GamaModelos" component={GamaModelos}></Drawer.Screen>
+        <Drawer.Screen name="AutosNuevos" component={AutosNuevos}></Drawer.Screen>
+        <Drawer.Screen name="AutosSeminuevos" component={AutosSeminuevos}></Drawer.Screen>
+        <Drawer.Screen name="ReparacionVivo" component={ReparacionVivo}></Drawer.Screen>
+        <Drawer.Screen name="CitaServicio" component={CitaServicio}></Drawer.Screen>
+        <Drawer.Screen name="TelAseguradoras" component={TelAseguradoras}></Drawer.Screen>
+        <Drawer.Screen name="Ajustes" component={Ajustes}></Drawer.Screen>
+      </Drawer.Navigator>
+    </NavigationContainer>
   );
 };
-
-
-/* <SafeAreaView style={backgroundStyle}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.js</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView> */
-
-const styles = StyleSheet.create({
-  container: {
-      flex: 1,
-      // justifyContent: 'center'
-  },
-
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
-
 export default App;

@@ -7,6 +7,14 @@ buildscript {
         compileSdkVersion = 29
         targetSdkVersion = 29
         ndkVersion = "20.1.5948944"
+        // Imp. 28/07/21, Para la libreria de maps
+        supportLibVersion = "28.0.0"
+        playServicesVersion = "17.0.0"
+        androidMapsUtilsVersion = "2.2.5"
+
+        // Para push notification
+        // googlePlayServicesVersion = "<Your play services version>" // default: "+"
+        // firebaseMessagingVersion = "<Your Firebase version>" // default: "21.1.0"
     }
     repositories {
         google()
